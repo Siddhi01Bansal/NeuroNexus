@@ -1,0 +1,94 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class TaskManager {
+public:
+    class Task {
+        public:
+        string description;
+        bool completed;
+    };
+
+    void addTask(const string& description) {
+        Task newTask;
+        newTask.description = description;
+        newTask.completed = false;
+        taskList.push_back(newTask);
+    }
+
+    void viewTasks() {
+        cout << "To-Do List:\n";
+        for (size_t i = 0; i < taskList.size(); i++) {
+            cout << i + 1 << ". " << (taskList[i].completed ? "[X] " : "[ ] ") << taskList[i].description << "\n";
+        }
+    }
+
+    void markTaskAsCompleted(size_t index) {
+        if (index >= 0 && index < taskList.size()) {
+            taskList[index].completed = true;
+        }
+    }
+
+    void removeTask(size_t index) {
+        if (index >= 0 && index < taskList.size()) {
+            taskList.erase(taskList.begin() + index);
+        }
+    }
+    private:
+    vector<Task> taskList;
+};
+
+int main() {
+    TaskManager taskManager;
+
+    while (true) {
+        cout << "\nTask Manager Menu:\n";
+        cout << "1. Add Task\n";
+        cout << "2. View Tasks\n";
+        cout << "3. Mark Task as Completed\n";
+        cout << "4. Remove Task\n";
+        cout << "5. Quit\n";
+        cout << "Enter your choice: ";
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                string description;
+                cout << "Enter the task description: ";
+                cin.ignore(); // Clear the newline character from the buffer
+                getline(std::cin, description);
+                taskManager.addTask(description);
+                cout << "Task added successfully!\n";
+                break;
+            }
+            case 2:
+                taskManager.viewTasks();
+                break;
+            case 3: {
+                size_t index;
+                cout << "Enter the task number to mark as completed: ";
+                cin >> index;
+                taskManager.markTaskAsCompleted(index - 1);
+                break;
+            }
+            case 4: {
+                size_t index;
+                cout << "Enter the task number to remove: ";
+                cin >> index;
+                taskManager.removeTask(index - 1);
+                break;
+            }
+            case 5:
+                cout << "Goodbye!\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
